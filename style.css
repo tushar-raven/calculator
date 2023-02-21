@@ -64,12 +64,12 @@ button {
     border-radius: 10px;
 }
 
-.delete-btn {
-    background-color: red;
+#delete {
+    background-color: #D22B2B;
     color: white;
 }
 
-.clear-btn {
-    background-color: green;
+#clear {
+    background-color: #228B22;
     color: white;
 }
