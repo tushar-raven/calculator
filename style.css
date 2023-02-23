@@ -38,6 +38,7 @@ body {
 
 .display-last,
 .display-current {
+    height: 40px;
     align-self: flex-end;
     font-family: sans-serif;
 }

@@ -1,122 +1,120 @@
 // For DOM manipulation
-const numberBtn = document.querySelectorAll("button")
-const displayCurrent = document.querySelector(".display-current")
-const displayLast = document.querySelector(".display-last")
+const buttons = document.querySelectorAll("button");
+const displayCurrent = document.querySelector(".display-current");
+const displayLast = document.querySelector(".display-last");
 
-// Dummy content to not let the empty display minimize
-displayCurrent.textContent = '\u00a0';
-displayLast.textContent = '\u00a0';
+// For displaying content
+let currentValue = '';
+let lastValue = '';
+displayCurrent.textContent = currentValue;
+displayLast.textContent = lastValue;
 
-// Access variables globally
-let newNumber = '';
-let currentNumber = '';
-let operator = '';
-let results;
-let a;
-let b = '';
-let bCase = false;
+//To access globally
+let operator = "";
 
-// Select all button without individual ID or class
-for(let i = 0; i < numberBtn.length; i++){
-    numberBtn[i].addEventListener('click', function(e){
-        display(e)
-    });
-}
 
-// to show results
+// Add an event listener to all button
+buttons.forEach((button) =>
+    button.addEventListener("click",(e) => display(e)
+));
+
 function display(e){
+    let button = e.target.id;
 
-    let button = e.target.id; // Access any button through it's ID
-
-    // if-else cases for operators, numbers, delete, and equal button
-
-    if(button == "delete"){ // to start from scratch
+    if (button == "clear") {
         location.reload()
 
-    } else if (button == "+" || button == "-" || button == "÷" || button == "×"){
-        
-        // if-else case for first/fresh operation and further operations
+    } else if (button == "delete") {
+        deleteDigits()
 
-        if (operator == ""){
-            firstOperation(e)
-
-        } else {
-                console.log(operator)
-                results = operate(operator,a,b)
-                operator = e.target.id
-                furtherOperations()
+    } else if (button == "+" || button == "-" || button == "÷" || button == "×") {
+        if(currentValue != ''){
+        console.log(button)
+        handleOperator(button)
+        displayLast.textContent = lastValue + operator;
+        displayCurrent.textContent = currentValue;
         }
 
-    } else if(button == "="){
-        
-        // If-else cases for pressing equal button without any second number
-        if (!b){
-            displayCurrent.textContent = a;
-            displayLast.textContent = '\u00a0';
-
-        } else {
-            results = operate(operator,a,b)
-            displayLast.textContent = a + operator + b + button;
-            displayCurrent.textContent = results;
+    } else if (button == "=") {
+        console.log("=")
+        if(currentValue != '0' && lastValue != '0'){
+            calculate()
+            displayLast.textContent = '';
+            if(lastValue.length <= 10){
+                displayCurrent.textContent = lastValue;
+            } else {
+                displayCurrent.textContent = lastValue.slice(0,12) + "..."
+            }
         }
+    } else if(button == ".") {
+        addDecimal()
+        displayCurrent.textContent = currentValue;
 
-        currentNumber = ''
-
-    } else { // case for all the numbers
-
-        newNumber = e.target.id;
-        currentNumber += newNumber;
-        displayCurrent.textContent = currentNumber;
-
-        // a is only required for first operation
-        if (!operator){
-            a = currentNumber;
-        } else {
-            b = currentNumber.slice(a.length + 1) // +1 for removing operator for the string
-        }
-        newNumber = ''
+    }  else { // case for all the numbers
+        handleNumber(button);
+        displayCurrent.textContent = currentValue;
     }
 }
 
-// To run the first or fresh operation
+// Handle numbers button
+function handleNumber(number) {
 
-function firstOperation(e){
-    operator = e.target.id;
-    displayCurrent.textContent += newNumber + operator;
-    currentNumber += newNumber + operator;
+    if(currentValue.length <= 15) { //To limit the numbers on screen
+    currentValue += number;
+    }
+}
+
+//Handle operators button
+function handleOperator(op){
+    operator = op;
+    lastValue = currentValue;
+    currentValue = '';
+}
+
+function calculate() {
     console.log(operator)
+    console.log(lastValue)
+    console.log(currentValue)
+    lastValue = operate(operator,lastValue,currentValue);
+    console.log(Boolean(lastValue - Math.floor(lastValue)))
+
+    if(Boolean(lastValue - Math.floor(lastValue))){ //check for decimal
+        lastValue = lastValue.toFixed(5)           //make sure that decimal are not more than 10 to avoid screen overfill
+    } else{
+        lastValue = lastValue
+    }
+
+    lastValue = lastValue.toString()
+    currentValue = lastValue;
 }
 
-// To run operations after the first operation
-function furtherOperations() {
-    displayCurrent.textContent = '\u00a0';
-    displayLast.textContent = results + operator;
-    currentNumber = ''
-    a = results;
+function addDecimal(){
+    if(!currentValue.includes('.')){
+        currentValue = currentValue + ".";
+    }
+}
 
-    if(operator == "+" || operator == "-"){
-        b = 0;
-    }
-    else if (operator == "÷" || operator == "×"){
-        b = 1;
-    }
+function deleteDigits() {
+    
+    currentValue = currentValue.slice(0, currentValue.length-1);
+    lastValue = lastValue.slice(0, lastValue.length-1);
+    displayCurrent.textContent = currentValue;
+    
 }
 
 // Individual Operator Functions
+// Number() function to avoid concatenation
 function add(a,b){
-    return (Number(a) + Number(b)) // to avoid concatenation
-}
-
+    return (Number(a) + Number(b)) 
+}                                 
 function subtract(a,b){
-    return (a - b);
+    return (Number(a) - Number(b));
 }
-
 function multiply(a,b){
-    return (a * b);
+    return (Number(a) * Number(b));
 }
-
 function divide(a,b){
-    return (a/b);
+    return (Number(a)/Number(b));
 }
 
 // Single Operate Function
@@ -133,4 +131,3 @@ function operate(operator,a,b){
     }
 
 }
-
