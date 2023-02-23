@@ -20,7 +20,7 @@ buttons.forEach((button) =>
 ));
 
 function display(e){
-    let button = e.target.id;
+    let button = e.target.id
 
     if (button == "clear") {
         location.reload()
@@ -29,8 +29,8 @@ function display(e){
         deleteDigits()
 
     } else if (button == "+" || button == "-" || button == "÷" || button == "×") {
+        
         handleOperator(e.target.textContent)
-        //lastValueWithOp = lastValue + operator;
         displayLast.textContent = lastValueWithOp;
         displayCurrent.textContent = currentValue;
 
