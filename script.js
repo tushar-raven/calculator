@@ -19,7 +19,9 @@ buttons.forEach((button) =>
     button.addEventListener("click",(e) => display(e)
 ));
 
+// to run different function according to different buttons
 function display(e){
+
     let button = e.target.id
 
     if (button == "clear") {
@@ -29,25 +31,17 @@ function display(e){
         deleteDigits()
 
     } else if (button == "+" || button == "-" || button == "÷" || button == "×") {
-        console.log(lastValue)
-        if(!lastValue){
+
+        //if-else for not allowing operator on blank screen or if operator is already present
+        if(!lastValue){ 
             handleOperator(e.target.textContent)
             displayLast.textContent = lastValueWithOp;
             displayCurrent.textContent = currentValue;
-        } else {
-            calculate()
-
-            displayLast.textContent = '';
-            if(lastValue.length <= 10){
-                displayCurrent.textContent = lastValue;
-            } else {
-                displayCurrent.textContent = lastValue.slice(0,12) + "..."
-            }
-            lastValue = ''
-            lastValueWithOp = ''
         }
 
     } else if (button == "=") {
+
+        // if-else for not allowing "=" when there is no value to operate
         if(currentValue != '0' && lastValue != '0'){
             calculate()
 
@@ -58,6 +52,7 @@ function display(e){
                 displayCurrent.textContent = lastValue.slice(0,12) + "..."
             }
             lastValue = ''
+            lastValueWithOp = ''
         }
 
     } else if(button == ".") {
@@ -109,6 +104,8 @@ function addDecimal(){
 }
 
 function deleteDigits() {
+
+    //if-else cases for different clearing different cases
 
     if(currentValue != '' && lastValue != ''){
         currentValue = currentValue.slice(0, currentValue.length-1);
