@@ -29,10 +29,23 @@ function display(e){
         deleteDigits()
 
     } else if (button == "+" || button == "-" || button == "÷" || button == "×") {
-        
-        handleOperator(e.target.textContent)
-        displayLast.textContent = lastValueWithOp;
-        displayCurrent.textContent = currentValue;
+        console.log(lastValue)
+        if(!lastValue){
+            handleOperator(e.target.textContent)
+            displayLast.textContent = lastValueWithOp;
+            displayCurrent.textContent = currentValue;
+        } else {
+            calculate()
+
+            displayLast.textContent = '';
+            if(lastValue.length <= 10){
+                displayCurrent.textContent = lastValue;
+            } else {
+                displayCurrent.textContent = lastValue.slice(0,12) + "..."
+            }
+            lastValue = ''
+            lastValueWithOp = ''
+        }
 
     } else if (button == "=") {
         if(currentValue != '0' && lastValue != '0'){
@@ -44,6 +57,7 @@ function display(e){
             } else {
                 displayCurrent.textContent = lastValue.slice(0,12) + "..."
             }
+            lastValue = ''
         }
 
     } else if(button == ".") {
