@@ -11,6 +11,7 @@ displayLast.textContent = lastValue;
 
 //To access globally
 let operator = "";
+let lastValueWithOp = "";
 
 
 // Add an event listener to all button
@@ -28,17 +29,15 @@ function display(e){
         deleteDigits()
 
     } else if (button == "+" || button == "-" || button == "÷" || button == "×") {
-        if(currentValue != ''){
-        console.log(button)
-        handleOperator(button)
-        displayLast.textContent = lastValue + operator;
+        handleOperator(e.target.textContent)
+        //lastValueWithOp = lastValue + operator;
+        displayLast.textContent = lastValueWithOp;
         displayCurrent.textContent = currentValue;
-        }
 
     } else if (button == "=") {
-        console.log("=")
         if(currentValue != '0' && lastValue != '0'){
             calculate()
+
             displayLast.textContent = '';
             if(lastValue.length <= 10){
                 displayCurrent.textContent = lastValue;
@@ -46,6 +45,7 @@ function display(e){
                 displayCurrent.textContent = lastValue.slice(0,12) + "..."
             }
         }
+
     } else if(button == ".") {
         addDecimal()
         displayCurrent.textContent = currentValue;
@@ -69,14 +69,14 @@ function handleOperator(op){
     operator = op;
     lastValue = currentValue;
     currentValue = '';
+    console.log(lastValue)
+    lastValueWithOp = lastValue + operator.toString();
+    console.log(lastValueWithOp)
 }
 
 function calculate() {
-    console.log(operator)
-    console.log(lastValue)
-    console.log(currentValue)
+
     lastValue = operate(operator,lastValue,currentValue);
-    console.log(Boolean(lastValue - Math.floor(lastValue)))
 
     if(Boolean(lastValue - Math.floor(lastValue))){ //check for decimal
         lastValue = lastValue.toFixed(5)           //make sure that decimal are not more than 10 to avoid screen overfill
@@ -95,11 +95,31 @@ function addDecimal(){
 }
 
 function deleteDigits() {
-    
-    currentValue = currentValue.slice(0, currentValue.length-1);
-    lastValue = lastValue.slice(0, lastValue.length-1);
-    displayCurrent.textContent = currentValue;
-    
+
+    if(currentValue != '' && lastValue != ''){
+        currentValue = currentValue.slice(0, currentValue.length-1);
+        //lastValue = lastValue.slice(0, lastValue.length-1);
+        displayCurrent.textContent = currentValue;
+        console.log("x")
+
+    } else if(lastValueWithOp.includes("+")||lastValueWithOp.includes("-")||lastValueWithOp.includes("×")||lastValueWithOp.includes("÷")){
+        operator = ''
+        displayLast.textContent = lastValue;
+        lastValueWithOp = lastValue;
+        console.log("x")
+
+    } else if(lastValueWithOp = lastValue){
+        lastValue = lastValue.slice(0, lastValue.length-1);
+        displayLast.textContent = lastValue;
+        console.log("x")
+
+    }else {
+        currentValue = currentValue.slice(0, currentValue.length-1);
+        lastValue = lastValue.slice(0, lastValue.length-1);
+        displayCurrent.textContent = currentValue;
+        console.log("x")
+    }
+
 }
 
 // Individual Operator Functions
