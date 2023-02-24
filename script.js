@@ -37,6 +37,9 @@ function display(e){
             handleOperator(e.target.textContent)
             displayLast.textContent = lastValueWithOp;
             displayCurrent.textContent = currentValue;
+        } else if (!operator) {
+            handleOperator(e.target.textContent)
+            displayLast.textContent = lastValueWithOp;
         }
 
     } else if (button == "=") {
@@ -75,12 +78,17 @@ function handleNumber(number) {
 
 //Handle operators button
 function handleOperator(op){
+    if(!currentValue){
+        operator = op;
+        lastValueWithOp = lastValue + operator.toString();
+    } else { 
     operator = op;
     lastValue = currentValue;
     currentValue = '';
     console.log(lastValue)
     lastValueWithOp = lastValue + operator.toString();
     console.log(lastValueWithOp)
+    }
 }
 
 function calculate() {
