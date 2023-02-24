@@ -106,7 +106,7 @@ function calculate() {
 }
 
 function addDecimal(){
-    if(!currentValue.includes('.')){
+    if(!currentValue.includes('.') && currentValue != ''){
         currentValue = currentValue + ".";
     }
 }
