@@ -106,7 +106,7 @@ function calculate() {
 }
 
 function addDecimal(){
-    if(!currentValue.includes('.') && currentValue != ''){
+    if(!currentValue.includes('.') && currentValue != ''){ // if else case not allowing decimal on empty screen or if it is already present
         currentValue = currentValue + ".";
     }
 }
@@ -132,7 +132,7 @@ function deleteDigits() {
         displayLast.textContent = lastValue;
         console.log("x")
 
-    }else {
+    } else {
         currentValue = currentValue.slice(0, currentValue.length-1);
         lastValue = lastValue.slice(0, lastValue.length-1);
         displayCurrent.textContent = currentValue;
